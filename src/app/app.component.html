@@ -1,0 +1,208 @@
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"
+/>
+<style>
+  .toolbar {
+    height: 60px;
+    margin: -8px;
+    align-items: center;
+    background-color: #1976d2;
+    color: white;
+    text-align: center;
+    font-size: 46px;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .pad-top {
+    padding-top: 15px;
+  }</style
+><!-- Toolbar -->
+<div kendoDialogContainer>
+  <div class="toolbar" role="banner">
+    <span class="text-center"></span>
+    Stok Takip
+    <div class="spacer"></div>
+  </div>
+  <div class="content pad-top" role="main">
+    <kendo-toolbar>
+      <kendo-toolbar-button
+        [iconClass]="iconClassEkleme"
+        *ngIf="!status"
+        (click)="YeniEKlemeFormAc()"
+        [text]="'Yeni Ürün Oluştur'"
+      >
+      </kendo-toolbar-button>
+
+      <kendo-toolbar-dropdownbutton
+        [disabled]="myTableRowSelection.length == 0"
+        [iconClass]="iconClass"
+        [text]="'Toplu İşlemler'"
+        [data]="topluIslemlerDropdown"
+        [textField]="'text'"
+      >
+      </kendo-toolbar-dropdownbutton>
+      <ng-template #template let-anchor>
+        <span> <img src="https://picsum.photos/200/300"></span>
+      </ng-template>
+    </kendo-toolbar>
+
+    <kendo-grid
+      [data]="gridView"
+      [pageSize]="10"
+      [height]="500"
+      [skip]="skip"
+      [selectable]="tablerowselectableSettings"
+      [pageable]="{
+        buttonCount: buttonCount,
+        info: info,
+        type: type,
+        pageSizes: pageSizes,
+        previousNext: previousNext
+      }"
+      change="onChange"
+      [selectable]="true"
+      scrollable="true"
+      (pageChange)="pageChange($event)"
+      kendoGridSelectBy="id"
+      [selectedKeys]="myTableRowSelection"
+      [filterable]="true"
+      [sortable]="true"
+      (cellClick)="onCellClick($event)"
+      (dblclick)="onDblClick()"
+      kendoTooltip
+      filter="span"
+      [tooltipTemplate]="template"
+    >
+      <kendo-grid-checkbox-column showSelectAll="true" width="40">
+      </kendo-grid-checkbox-column>
+
+      <kendo-grid-column
+        [filterable]="false"
+        field="id"
+        title="Sıra"
+        width="90"
+      >
+      </kendo-grid-column>
+
+      <kendo-grid-command-column title="Resim" width="220">
+        <ng-template kendoGridCellTemplate>
+          <div
+            kendoTooltip
+            #tooltip="kendoTooltip"
+            [tooltipTemplate]="template"
+            showOn="none"
+            position="left"
+            filter="span"
+            style="padding-top: 10px;"
+          >
+            <span class="fa fa-image"></span>
+          </div>
+        </ng-template>
+      </kendo-grid-command-column>
+
+      <kendo-grid-column
+        [filterable]="false"
+        field="code"
+        title="Ürün Kodu"
+        width="110"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column field="name" title="Ürün Adı" width="400">
+      </kendo-grid-column>
+      <kendo-grid-column
+        [filterable]="false"
+        field="categoryName"
+        title="Kategori"
+        width="80"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        [filterable]="false"
+        field="companyName"
+        title="Şirket"
+        width="80"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        [filterable]="false"
+        field="CC"
+        title="Birim"
+        width="80"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        [filterable]="false"
+        field="unitPrice"
+        title="Birim Fiyatı"
+        width="80"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        [filterable]="false"
+        field="discountedUnitPrice"
+        title="İndirimli Birim Fiyatı"
+        width="80"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        [filterable]="false"
+        field="opportunityMoney"
+        title="Fırsat para"
+        width="80"
+      >
+      </kendo-grid-column>
+      <kendo-grid-column
+        [filterable]="false"
+        field="CC"
+        title="Satış Alanı"
+        width="80"
+      >
+      </kendo-grid-column>
+      <kendo-grid-command-column title="command" width="220">
+        <ng-template kendoGridCellTemplate>
+          <button kendoGridEditCommand class="k-primary">
+            <span class="fa fa-shopping-basket"></span>
+          </button>
+          <button kendoGridRemoveCommand>
+            <span class="fa fa-bars"></span>
+          </button>
+        </ng-template>
+      </kendo-grid-command-column>
+    </kendo-grid>
+    <ng-template kendoGridToolbarTemplate>
+      <input
+        placeholder="Search in all columns..."
+        kendoTextBox
+        (input)="onFilter($event.target.value)"
+      />
+      <button
+        kendoGridExcelCommand
+        type="button"
+        icon="file-excel"
+        style="float:right;"
+      >
+        Export to Excel
+      </button>
+      <button kendoGridPDFCommand icon="file-pdf" style="float:right;">
+        Export to PDF
+      </button>
+    </ng-template>
+
+    <!-- <kendo-dialog
+        title="Action required"
+         *ngIf="opened"
+         (close)="close('close')"
+         [width]="400">
+        <p style="margin: 30px; text-align: center;">Do you accept?</p>
+
+        <kendo-dialog-actions>
+          <button kendoButton (click)="close('yes')">Yes</button>
+          <button kendoButton (click)="close('no')">No</button>
+        </kendo-dialog-actions>
+      </kendo-dialog> -->
+  </div>
+</div>
